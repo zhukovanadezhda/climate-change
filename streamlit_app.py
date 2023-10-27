@@ -7,6 +7,9 @@ import pandas as pd
 from scripts import toolbox as tb
 
 
+st.title('Climate Change Dashboard')
+
+
 def plot_timeseries(df_list, observ_names):
     fig = go.Figure()
 
@@ -44,7 +47,7 @@ def plot_timeseries(df_list, observ_names):
         height=400
     )
 
-    fig.show()
+    st.plotly_chart(fig)
 
 data_lables = {"brw": "Barrow Observatory, Alaska", 
                "mlo": "Mauna Loa, Hawaii",
