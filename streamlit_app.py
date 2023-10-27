@@ -6,10 +6,8 @@ import pandas as pd
 
 from scripts import toolbox as tb
 
-st.beta_set_page_config(
-    layout="wide",  # Use the "wide" layout
-    page_title="Climate Change Dashboard",
-)
+
+st.title('Climate Change Dashboard')
 
 data_lables = {"brw": "Barrow Observatory, Alaska", 
                "mlo": "Mauna Loa, Hawaii",
