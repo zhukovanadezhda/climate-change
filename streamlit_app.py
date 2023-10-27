@@ -5,9 +5,8 @@ from plotly.subplots import make_subplots
 import pandas as pd
 
 from scripts import toolbox as tb
-
-
-st.title('Climate Change Dashboard')
+st.set_page_config(page_title="Climate Change Dashboard",
+                   layout="wide")
 
 data_lables = {"brw": "Barrow Observatory, Alaska", 
                "mlo": "Mauna Loa, Hawaii",
