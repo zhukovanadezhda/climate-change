@@ -92,7 +92,7 @@ def add_timeseries_to_app(df_list, observ_names):
     fig.update_xaxes(title_text="Time")
     fig.update_yaxes(title_text="CO2 mole fraction (ppm)")
     fig.update_layout(
-        title=f"CO2 Concentration Over Time",
+        title=f"Monthly CO2 Concentrations",
         showlegend=True,
         updatemenus=[
             {

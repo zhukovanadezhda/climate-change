@@ -29,3 +29,4 @@ for data in data_sources:
     observ_names.append(data_lables[data.split("_")[4]])  
 
 tb.add_timeseries_to_app(df_list, observ_names)
+st.markdown("Data Source: National Oceanic and Atmospheric Administration (NOAA)")
