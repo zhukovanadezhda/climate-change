@@ -15,12 +15,11 @@ df = tb.correct_season(df)
 fig = make_subplots(rows=1, cols=2)
 fig = px.line(df, x='datetime', y='value', labels={'datetime': 'Time', 'value': 'CO2 Concentration'},
               title='CO2 Concentration Over Time')
-fig.update_traces(mode='lines+markers', hovertemplate='%{y:.2f} ppm<br>%{x}', line=dict(width=2)
+fig.update_traces(mode='lines+markers', hovertemplate='%{y:.2f} ppm<br>%{x}', line=dict(width=2))
 
 
 st.title('My Streamlit App')
 st.plotly_chart(fig)
-
 
 # st.sidebar.header("Let's look for the info you need")
 # req = st.sidebar.text_area("Write your request below:")
