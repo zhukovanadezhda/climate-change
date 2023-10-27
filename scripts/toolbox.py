@@ -92,7 +92,7 @@ def add_timeseries_to_app(df_list, observ_names):
     fig.update_xaxes(title_text="Time")
     fig.update_yaxes(title_text="CO2 mole fraction (ppm)")
     fig.update_layout(
-        title=f"Atmospheric CO2 Dry Air Mole Fractions from quasi-continuous measurements at Barrow, Alaska; Mauna Loa, Hawaii; American Samoa 1973-2022.",
+        title=f"Atmospheric CO2 mole fractions",
         showlegend=True,
         updatemenus=[
             {
