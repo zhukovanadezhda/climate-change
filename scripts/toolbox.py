@@ -82,11 +82,11 @@ def add_timeseries_to_app(df_list, observ_names):
 
     for i, df in enumerate(df_list):
         fig.add_trace(go.Scatter(x=df["datetime"], y=df["value"], mode='lines+markers', 
-                                 name=f"CO2 mole fraction - {observ_names[i]}", visible=i == 0))
+                                 name=f"CO2 mole fraction", visible=i == 0))
 
     for i, df in enumerate(df_list):
         fig.add_trace(go.Scatter(x=df["datetime"], y=df["corrected_value"], mode='lines', 
-                                 name=f"Average seasonal cycle correction - {observ_names[i]}", 
+                                 name=f"Average seasonal cycle correction", 
                                  line=dict(color="black", width=1), visible=i == 0))
 
     fig.update_xaxes(title_text="Time")
