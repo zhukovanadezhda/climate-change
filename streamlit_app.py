@@ -7,7 +7,6 @@ import pandas as pd
 from scripts import toolbox as tb
 
 
-
 def plot_timeseries(df_list, observ_names):
     fig = go.Figure()
 
