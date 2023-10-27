@@ -1,46 +1,69 @@
 import streamlit as st
 import plotly.express as px
+import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
 
 from scripts import toolbox as tb
 
-data = "data/co2_surface-insitu_ccgg_text/co2_brw_surface-insitu_1_ccgg_MonthlyData.txt"
-df = pd.read_csv(data, comment="#", sep=" ", header=0)
-df.drop(columns="qcflag", inplace=True)
-df = tb.convert_to_datetime(df)
-df = tb.drop_missing_values(df)
-df = tb.correct_season(df)
-
-fig = make_subplots(rows=1, cols=2)
-fig = px.line(df, x='datetime', y='value', labels={'datetime': 'Time', 'value': 'CO2 Concentration'},
-              title='CO2 Concentration Over Time')
-fig.update_traces(mode='lines+markers', hovertemplate='%{y:.2f} ppm<br>%{x}', line=dict(width=2))
 
 
-st.title('My Streamlit App')
-st.plotly_chart(fig)
+def plot_timeseries(df_list, observ_names):
+    fig = go.Figure()
 
-# st.sidebar.header("Let's look for the info you need")
-# req = st.sidebar.text_area("Write your request below:")
-# search_button = st.sidebar.button("Search")
+    for i, df in enumerate(df_list):
+        fig.add_trace(go.Scatter(x=df["datetime"], y=df["value"], mode='lines+markers', 
+                                 name=f"CO2 mole fraction - {observ_names[i]}", visible=i == 0))
 
-# if search_button:
-#     try:
-#         req_text = fc.call_wiki(req.strip())
-#         st.title(f"{req}")
-#         st.write(req_text)
-#     except:
-#         st.title(f"{req}")
-#         st.header("Sorry!")
-#         st.write(f"I don't have any information about {req}")
-# else:
-#     st.title(f"Ooops...")
-#     st.header("Sorry!")
-#     st.write("You have to provide a request!")
-    
-    
+    for i, df in enumerate(df_list):
+        fig.add_trace(go.Scatter(x=df["datetime"], y=df["corrected_value"], mode='lines', 
+                                 name=f"Average seasonal cycle correction - {observ_names[i]}", 
+                                 line=dict(color="black", width=1), visible=i == 0))
 
-#col1, col2 = st.columns(2)
-#col1.header("")
-#col1.expander("")
+    fig.update_xaxes(title_text="Time")
+    fig.update_yaxes(title_text="CO2 mole fraction (ppm)")
+    fig.update_layout(
+        title=f"CO2 Concentration Over Time",
+        showlegend=True,
+        updatemenus=[
+            {
+                'buttons': [
+                    {'method': 'restyle',
+                     'label': f'{observ_names[i]}',
+                     'args': [{'visible': [(j == i) for j in range(len(df_list))]}],
+                    } for i in range(len(df_list))
+                ],
+                'direction': 'down',
+                'showactive': True,
+                'x': 0.1,
+                'xanchor': 'left',
+                'y': 1.1,
+                'yanchor': 'top',
+            }
+        ],
+        width=1000,
+        height=400
+    )
+
+    fig.show()
+
+data_lables = {"brw": "Barrow Observatory, Alaska", 
+               "mlo": "Mauna Loa, Hawaii",
+               "smo": "American Samoa, USA"}
+
+data_sources = [f"data/co2_surface-insitu_ccgg_text/co2_{lable}_surface-insitu_1_ccgg_MonthlyData.txt" 
+        for lable in data_lables.keys()]
+
+df_list =[]
+observ_names = []
+
+for data in data_sources:
+    df = pd.read_csv(data, comment="#", sep=" ", header=0)
+    df.drop(columns="qcflag", inplace=True)
+    df = tb.convert_to_datetime(df)
+    df = tb.drop_missing_values(df)
+    df = tb.correct_season(df)
+    df_list.append(df)
+    observ_names.append(data_lables[data.split("_")[4]])  
+
+plot_timeseries(df_list, observ_names)
