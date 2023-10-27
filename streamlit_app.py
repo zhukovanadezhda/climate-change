@@ -9,46 +9,6 @@ from scripts import toolbox as tb
 
 st.title('Climate Change Dashboard')
 
-
-def plot_timeseries(df_list, observ_names):
-    fig = go.Figure()
-
-    for i, df in enumerate(df_list):
-        fig.add_trace(go.Scatter(x=df["datetime"], y=df["value"], mode='lines+markers', 
-                                 name=f"CO2 mole fraction - {observ_names[i]}", visible=i == 0))
-
-    for i, df in enumerate(df_list):
-        fig.add_trace(go.Scatter(x=df["datetime"], y=df["corrected_value"], mode='lines', 
-                                 name=f"Average seasonal cycle correction - {observ_names[i]}", 
-                                 line=dict(color="black", width=1), visible=i == 0))
-
-    fig.update_xaxes(title_text="Time")
-    fig.update_yaxes(title_text="CO2 mole fraction (ppm)")
-    fig.update_layout(
-        title=f"CO2 Concentration Over Time",
-        showlegend=True,
-        updatemenus=[
-            {
-                'buttons': [
-                    {'method': 'restyle',
-                     'label': f'{observ_names[i]}',
-                     'args': [{'visible': [(j == i) for j in range(len(df_list))]}],
-                    } for i in range(len(df_list))
-                ],
-                'direction': 'down',
-                'showactive': True,
-                'x': 0.1,
-                'xanchor': 'left',
-                'y': 1.1,
-                'yanchor': 'top',
-            }
-        ],
-        width=1000,
-        height=400
-    )
-
-    st.plotly_chart(fig)
-
 data_lables = {"brw": "Barrow Observatory, Alaska", 
                "mlo": "Mauna Loa, Hawaii",
                "smo": "American Samoa, USA"}
@@ -68,4 +28,4 @@ for data in data_sources:
     df_list.append(df)
     observ_names.append(data_lables[data.split("_")[4]])  
 
-plot_timeseries(df_list, observ_names)
+tb.add_timeseries_to_app(df_list, observ_names)
