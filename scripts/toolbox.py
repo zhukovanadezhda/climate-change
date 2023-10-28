@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
 
+
 def plot_boxplots(df, observation_name):
 
     columns_to_plot = ["value", "value_std_dev", "latitude",
@@ -22,7 +23,8 @@ def plot_boxplots(df, observation_name):
     fig.suptitle(f"Boxplots of the variables of {observation_name} dataset", y=1.02)
     fig.tight_layout()
     plt.show()
-    
+
+
 def convert_to_datetime(df):
     df["datetime"] = pd.to_datetime(df[["year", "month", "day", "hour", "minute", "second"]], errors='coerce')
     df["value"] = pd.to_numeric(df["value"], errors='coerce')
@@ -33,10 +35,12 @@ def convert_to_datetime(df):
     
     return df
 
+
 def drop_missing_values(df):
     # Missing data will have a value of -999.99 for the mole fraction
     df = df[df["value"] != -999.99]
     return df
+
 
 def correct_season(df):
 
@@ -46,9 +50,7 @@ def correct_season(df):
                                                 min_periods=cycle_window // 2, 
                                                 center=True).mean()
     return df
-
-        
-    return df
+    
 
 def plot_timeseries(df, observ_name):
 
@@ -76,7 +78,8 @@ def plot_timeseries(df, observ_name):
 
     plt.tight_layout()
     plt.show()
-    
+
+
 def add_timeseries_to_app(df_list, observ_names):
     fig = go.Figure()
 
@@ -85,7 +88,7 @@ def add_timeseries_to_app(df_list, observ_names):
                                  name=f"CO2 mole fraction", visible=i == 0))
 
     for i, df in enumerate(df_list):
-        fig.add_trace(go.Scatter(x=df["datetime"], y=df["corrected_value"], mode='lines', 
+        fig.add_trace(go.Scatter(x=df["datetime"], y=df["corrected_value"], mode="lines", 
                                  name=f"Average seasonal cycle correction", 
                                  line=dict(color="black", width=1), visible=i == 0))
 
